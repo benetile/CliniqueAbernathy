@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
@@ -12,7 +13,7 @@ import java.util.Date;
 @Document(collection = "patient")
 public class Patient {
 
-    @Field("_id")
+    //@Field("_id")
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,15 +25,8 @@ public class Patient {
     private String homeAddress;
     private String phone;
 
-    public Patient(Integer id, String firstName, String lastName, Date birthday, String sex, String homeAddress, String phone) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthday = birthday;
-        this.sex = sex;
-        this.homeAddress = homeAddress;
-        this.phone = phone;
-    }
+    @Transient
+    public static final String SEQUENCE_PATIENT = "sequencePatient";
 
     public Patient() {
     }

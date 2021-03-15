@@ -1,17 +1,18 @@
 package com.mpraticien.service.dao;
 
 import com.mpraticien.model.Praticien;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-@Repository
+@Service
 public interface PraticienServiceDao {
 
     List<Praticien> findAllPraticien() throws SQLException;
 
-    Praticien findById(int id) throws SQLException;
+    Optional findById(int id) throws SQLException;
 
     List<Praticien> findByFirstName(String firstName) throws SQLException;
 
@@ -23,7 +24,7 @@ public interface PraticienServiceDao {
 
     void updateInfoPraticien(int id, Praticien praticien) throws SQLException;
 
-    void addPraticien(Praticien praticien) throws SQLException;
+    Praticien addPraticien(Praticien praticien) throws SQLException;
 
     void deletePraticien(int id) throws SQLException;
 }

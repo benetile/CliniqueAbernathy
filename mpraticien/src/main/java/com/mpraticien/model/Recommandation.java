@@ -1,17 +1,21 @@
 package com.mpraticien.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.*;
 import java.sql.Date;
 
+@Entity
+@Document(value = "recommandation")
 public class Recommandation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private int idPatient;
     private String observation;
+
+    @Transient
+    public static final String SEQUENCE_RECOMMANDATION = "sequenceRecommandation";
 
     public Recommandation() {
     }

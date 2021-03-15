@@ -6,11 +6,14 @@ import com.clinique.config.ConfigBD;
 import com.clinique.model.Assessment;
 import com.clinique.proxy.MPatientProxy;
 import com.clinique.proxy.MRecommandationProxy;
+import com.clinique.service.dao.AssessmentRepository;
 import com.clinique.service.dao.AssessmentServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -28,6 +31,9 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
     @Autowired
     private ConfigBD configBD;
 
+    @Autowired
+    AssessmentRepository repository;
+
     private Connection connection;
 
     private static  final List<String> triggers = Arrays.asList("Hémoglobine A1C","hémoglobine A1C","Microalbumine","microalbumine","Poids","poids","fumeur","Fumeur","Anormal","anormal","Cholestérol","cholestérol","Vertige","vertige",
@@ -35,13 +41,17 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
 
     @Override
     public void saveAssessment(Assessment input) throws SQLException {
+        //save in mongoDb
+        repository.save(input);
+        //save in Sql
         connection = configBD.getConnection();
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO assessment(idPatient,firstName,age,assessment) values (?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO assessment(id,idPatient,firstName,age,assessment) values (?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 
-        statement.setInt(1,input.getIdPatient());
-        statement.setString(2,input.getFirstName());
-        statement.setInt(3,input.getAge());
-        statement.setString(4,input.getAssessment());
+        statement.setInt(1,input.getId());
+        statement.setInt(2,input.getIdPatient());
+        statement.setString(3,input.getFirstName());
+        statement.setInt(4,input.getAge());
+        statement.setString(5,input.getAssessment());
 
         statement.executeUpdate();
         ResultSet rs = statement.getGeneratedKeys();
@@ -53,6 +63,9 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
 
     @Override
     public void updateAssessment(int id,Assessment update) throws SQLException {
+        //update in mongoDb
+        repository.save(update);
+        //update in Sql
         connection = configBD.getConnection();
         PreparedStatement statement = connection.prepareStatement("UPDATE assessment SET firstName=?, age=?, assessment=? WHERE idPatient=?;");
 
@@ -67,6 +80,9 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
 
     @Override
     public void deleteAssessment(int id) throws SQLException {
+        //delete in mongo
+        repository.deleteById(id);
+        //delete in Sql
         connection = configBD.getConnection();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM assessment WHERE idPatient=?;");
         statement.setInt(1,id);
@@ -77,21 +93,7 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
 
     @Override
     public List<Assessment> findAssessments() throws SQLException {
-        connection = configBD.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM assessment;");
-        ResultSet set = statement.executeQuery();
-        List<Assessment>assessments = new ArrayList<>();
-
-        while (set.next()){
-            Assessment assessment = new Assessment();
-            assessment.setIdPatient(set.getInt("idPatient"));
-            assessment.setFirstName(set.getString("firstName"));
-            assessment.setAge(set.getInt("age"));
-            assessment.setAssessment(set.getString("assessment"));
-
-            assessments.add(assessment);
-        }
-        return assessments;
+        return repository.findAll();
     }
 
     @Override

@@ -26,13 +26,7 @@ public class AssessmentController {
 
     @GetMapping("/assess/delete/{id}")
     public void deleteAnAssessment(@PathVariable("id") int id) throws SQLException{
-        Assessment assessment = assessmentServiceDao.findAssessmentById(id);
-        if(assessment!=null){
-            assessmentServiceDao.deleteAssessment(id);
-        }
-        else{
-            throw new SQLException("n'existe pas");
-        }
+       assessmentServiceDao.deleteAssessment(id);
     }
     @GetMapping("/assess/id/{id}")
     public Assessment generateAssessment(@PathVariable ("id") int id) throws SQLException {
@@ -44,7 +38,6 @@ public class AssessmentController {
         }
         else {
             assessmentServiceDao.saveAssessment(generateAssess);
-
         }
         return generateAssess;
     }
@@ -57,12 +50,6 @@ public class AssessmentController {
 
     @GetMapping("/assess/firstName/{firstName}")
     public Assessment getAssementByname(@PathVariable("firstName") String firstName)throws SQLException{
-        Assessment assessment = assessmentServiceDao.findAssessmentByFirstName(firstName);
-        if(assessment!=null){
-            return assessment;
-        }
-        else{
-            throw new SQLException("n'existe pas");
-        }
+       return assessmentServiceDao.findAssessmentByFirstName(firstName);
     }
 }

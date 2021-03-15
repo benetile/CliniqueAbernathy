@@ -1,12 +1,12 @@
 package com.clinique.service.dao;
 
 import com.clinique.model.Assessment;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Repository
+@Service
 public interface AssessmentServiceDao {
 
     Assessment findAssessmentById(int id) throws SQLException;

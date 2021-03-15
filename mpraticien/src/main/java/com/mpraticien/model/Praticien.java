@@ -7,7 +7,6 @@ import javax.persistence.*;
 public class Praticien {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer idPraticien;
     private String firstName;
     private String lastName;
@@ -15,7 +14,8 @@ public class Praticien {
     private String sex;
     private String phone;
 
-
+    @Transient
+    public static final String SEQUENCE_PRATICIEN = "sequencePraticien";
 
     public Praticien() {
     }

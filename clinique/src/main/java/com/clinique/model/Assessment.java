@@ -1,12 +1,24 @@
 package com.clinique.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
+@Entity
+@Document(value = "assessment")
 public class Assessment {
 
+    @Id
     private int id;
     private Integer idPatient;
     private String firstName;
     private int age;
     private String  assessment;
+
+    @Transient
+    public static final String SEQUENCE = "sequenceAssessemnt";
 
     public Assessment() {
     }

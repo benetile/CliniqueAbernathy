@@ -2,11 +2,14 @@ package com.clinique.service.impl;
 
 import com.clinique.config.ConfigBD;
 import com.clinique.model.Appointment;
+import com.clinique.service.dao.AppointmentRepository;
 import com.clinique.service.dao.AppointmentServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentServiceDao {
@@ -14,12 +17,19 @@ public class AppointmentServiceImpl implements AppointmentServiceDao {
     @Autowired
     private ConfigBD configBD;
 
+    @Autowired
+    AppointmentRepository repository;
+
     private Connection connection;
 
     @Override
     public Appointment makeAnAppointment(Appointment appointment) throws SQLException {
+        //save appointment in database mongoDb
+        repository.save(appointment);
+
+        //save appointement in sql
         connection = configBD.getConnection();
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO appointment(firstName,lastName,pattern,dateAppointment) VALUES (?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO appointment(id,firstName,lastName,pattern,dateAppointment) VALUES (?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, appointment.getFirstName());
         statement.setString(2, appointment.getLastName());
@@ -32,24 +42,17 @@ public class AppointmentServiceImpl implements AppointmentServiceDao {
             appointment.setId(rs.getInt(1));
             return appointment;
         }
-        return null;
+        return appointment;
     }
 
     @Override
-    public Appointment findAppointmentById(int id) throws SQLException {
-        connection = configBD.getConnection();
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM appointment WHERE id=?;");
-        statement.setInt(1,id);
+    public List<Appointment> findAll() {
+        return repository.findAll();
+    }
 
-        ResultSet rs = statement.executeQuery();
-        Appointment appointment = new Appointment();
-        while (rs.next()){
-            appointment.setId(rs.getInt("id"));
-            appointment.setFirstName(rs.getString("firstName"));
-            appointment.setLastName(rs.getString("lastName"));
-            appointment.setDateAppointment(rs.getDate("dateAppointment"));
-        }
-        return appointment;
+    @Override
+    public Optional findAppointmentById(int id) throws SQLException {
+       return repository.findById(id);
     }
 
     @Override
@@ -73,6 +76,9 @@ public class AppointmentServiceImpl implements AppointmentServiceDao {
 
     @Override
     public void updateAnAppointment(int id, Appointment appointment) throws SQLException {
+        //update in mongodb
+        repository.save(appointment);
+        //update sql
         connection = configBD.getConnection();
         PreparedStatement statement = connection.prepareStatement("UPDATE appointment SET firstName=?,lastName=?,pattern=?,dateAppointment=? WHERE id=?;");
         statement.setString(1, appointment.getFirstName());
@@ -86,6 +92,10 @@ public class AppointmentServiceImpl implements AppointmentServiceDao {
 
     @Override
     public void deleteAnAppointment(int id) throws SQLException {
+        //delete in mongoDb
+        repository.deleteById(id);
+
+        //delete in sql
         connection = configBD.getConnection();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM appointment WHERE id=?;");
         statement.setInt(1,id);

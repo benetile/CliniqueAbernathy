@@ -4,59 +4,50 @@ import com.mpraticien.beans.PatientBean;
 import com.mpraticien.model.Recommandation;
 import com.mpraticien.proxy.MPatientProxy;
 import com.mpraticien.service.dao.RecommandationDao;
+import com.mpraticien.service.impl.GenerateIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class RecommadationController {
 
     @Autowired
-    private MPatientProxy MPatientProxy;
+    private MPatientProxy mPatientProxy;
 
     @Autowired
-    RecommandationDao recommandationDao;
+    private RecommandationDao recommandationDao;
+
+    @Autowired
+    private GenerateIdService generateIdService;
 
     @GetMapping("/recommandation/patients/{id}")
     public List<Recommandation> getAllRecommandationPatient(@PathVariable ("id") int id) throws SQLException{
-        PatientBean patientBean = MPatientProxy.getPatientById(id);
-        List<Recommandation> recommandations = recommandationDao.findById(patientBean.getId());
-        if(recommandations!=null){
-            return recommandations;
-        }
-        else {
-            throw new SQLException(+id+ " n'existe pas");
-        }
+        return recommandationDao.findById(id);
     }
 
+    @GetMapping("/recommandation/patients/id/{id}")
+    public Optional<Recommandation> getRecommandationById(@PathVariable("id") int id) throws SQLException {
+        return recommandationDao.findRecommandationById(id);
+    }
     @PostMapping("/recommandations/add/{id}")
-    public void addNewRecommandation(@RequestBody Recommandation inputRecommandation,@PathVariable("id") int id) throws SQLException{
-        PatientBean patientBean = MPatientProxy.getPatientById(id);
-        if(patientBean!=null){
-            inputRecommandation.setIdPatient(patientBean.getId());
-            recommandationDao.addRecommandation(inputRecommandation);
-        }
-        else {
-            throw new SQLException("erreur");
-        }
+    public Recommandation addNewRecommandation(@RequestBody Recommandation inputRecommandation,@PathVariable("id") int id) throws SQLException{
+        PatientBean bean = mPatientProxy.getPatientById(id);
+        inputRecommandation.setId(generateIdService.getSequenceNumberRecommandtaion(Recommandation.SEQUENCE_RECOMMANDATION));
+        inputRecommandation.setIdPatient(bean.getId());
+        return recommandationDao.addRecommandation(inputRecommandation);
     }
 
     @PutMapping("/recommandations/update/{id}")
     public void updateAObservation(@PathVariable ("id") int id, @RequestBody Recommandation updateObs)throws SQLException{
-       Recommandation recommandation = recommandationDao.findRecommandationById(id);
-        if(recommandation!=null){
-            recommandationDao.updateRecommandation(id, updateObs.getObservation());
-        }
-        else {
-            throw new SQLException("erreur");
-        }
+       updateObs.setId(id);
+       recommandationDao.updateRecommandation(id,updateObs);
     }
     @DeleteMapping("/recommandations/delete/{id}")
-    public void deleteAnRecommandation(@PathVariable("id") int id) throws SQLException{
+    public void deleteRecommandation(@PathVariable("id") int id) throws SQLException{
         recommandationDao.deleteRecommandation(id);
     }
 }

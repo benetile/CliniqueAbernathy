@@ -1,14 +1,25 @@
 package com.clinique.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.sql.Date;
 
+@Entity
+@Document(value = "appointment")
 public class Appointment {
 
+    @Id
     private Integer id;
     private String firstName;
     private String lastName;
     private String pattern;
     private Date dateAppointment;
+
+    @Transient
+    public static final String SEQUENCE = "sequenceAppointment";
 
     public Appointment() {
     }

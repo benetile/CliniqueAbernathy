@@ -1,16 +1,20 @@
 package com.clinique.service.dao;
 
 import com.clinique.model.Appointment;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
-@Repository
+@Service
 public interface AppointmentServiceDao {
 
     Appointment makeAnAppointment(Appointment appointment) throws SQLException;
 
-    Appointment findAppointmentById(int id) throws SQLException;
+    List<Appointment> findAll();
+
+    Optional findAppointmentById(int id) throws SQLException;
 
     Appointment findAppointmentByFirstAndLastName(String firstName, String lastName) throws SQLException;
 
