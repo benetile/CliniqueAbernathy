@@ -12,21 +12,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
+import java.text.Collator;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class AssessmentServiceImpl implements AssessmentServiceDao {
 
     @Autowired
-    private MPatientProxy mPatientProxy;
+    MPatientProxy mPatientProxy;
 
     @Autowired
-    private MRecommandationProxy mRecommandationProxy;
+    MRecommandationProxy mRecommandationProxy;
 
     @Autowired
     private ConfigBD configBD;
@@ -34,11 +33,14 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
     @Autowired
     AssessmentRepository repository;
 
+    Locale french = new Locale("fr","FR");
+
     private Connection connection;
 
     private static  final List<String> triggers = Arrays.asList("Hémoglobine A1C","hémoglobine A1C","Microalbumine","microalbumine","Poids","poids","fumeur","Fumeur","Anormal","anormal","Cholestérol","cholestérol","Vertige","vertige",
             "Rechute","rechute","réaction", "Réaction","Anticorps","anticorps","Taille","taille");
 
+    Collator fr = Collator.getInstance(new Locale("fr"));
     @Override
     public void saveAssessment(Assessment input) throws SQLException {
         //save in mongoDb
@@ -131,42 +133,39 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
     }
 
     @Override
-    public Assessment generateAssessment(int id) {
+    public String generateAssessment(int id,long age,String sex) {
         Assessment assessment = new Assessment();
-        PatientBean patientBean = mPatientProxy.getPatientById(id);
-        long age = new Date().getYear() - patientBean.getBirthday().getYear();
-        assessment.setIdPatient(patientBean.getId());
-        assessment.setFirstName(patientBean.getFirstName());
-        assessment.setAge((int) age);
+
         int number = verifyTriggers(id);
-        System.out.println(number);
         if(age>30 && number==2){
-            assessment.setAssessment("Bordeline");
+            return "Bordeline";
         }
         else if((age>30) && (number>2 && number<=7)){
-            assessment.setAssessment("In Danger");
+            return "In Danger";
         }
         else if( age>30 && number > 7){
-            assessment.setAssessment("Early onset");
+            return "Early onset";
         }
-        else if((age<30) &&(patientBean.getSex().contains("M") && number==6)){
-            assessment.setAssessment("In Danger");
+        else if((age<30) &&(sex.contains("M") && number==6)){
+           return "In Danger";
         }
         else if(age<30 && number<5){
-            assessment.setAssessment(determinatedForInDanger(number, patientBean.getId()));
+            assessment.setAssessment(determinatedForInDanger(number,id,sex));
+            return assessment.getAssessment();
         }
         else if((age<30) && (number>=5 && number<=7)){
-            assessment.setAssessment(determinatedForEarlyOnset(number, patientBean.getId()));
+            assessment.setAssessment(determinatedForEarlyOnset(number,id,sex));
+            return assessment.getAssessment();
         }
         else if (number<2){
             assessment.setAssessment("None");
+            return assessment.getAssessment();
         }
-        return assessment;
+        return "None";
     }
 
     public int verifyTriggers(int id){
-        PatientBean patientBean = mPatientProxy.getPatientById(id);
-        List<RecommandationBean> recommandationBean = mRecommandationProxy.getAllRecommandationPatient(patientBean.getId());
+        List<RecommandationBean> recommandationBean = mRecommandationProxy.getAllRecommandationPatient(id);
         int count = 0;
         for (RecommandationBean bean : recommandationBean){
             for (String trigger : triggers){
@@ -179,26 +178,23 @@ public class AssessmentServiceImpl implements AssessmentServiceDao {
         return count;
     }
 
-    public String determinatedForInDanger(int number, int id){
+    public String determinatedForInDanger(int number, int id,String sex){
         PatientBean patientBean = mPatientProxy.getPatientById(id);
 
-        if((patientBean.getSex().contains("M")) && number == 3){
+        if((sex.contains("M")) && number == 3){
             return "In Danger";
         }
-        else if((patientBean.getSex().contains("F")) && number== 4){
+        else if((sex.contains("F")) && number== 4){
             return "In Danger";
         }
-
         return "Bordeline";
     }
 
-    public String determinatedForEarlyOnset(int number, int id){
-        PatientBean patientBean = mPatientProxy.getPatientById(id);
-        long age = new Date().getYear() - patientBean.getBirthday().getYear();
-        if((patientBean.getSex().contains("M")) && number == 5){
+    public String determinatedForEarlyOnset(int number, int id,String sex){
+        if((sex.contains("M")) && number == 5){
             return "Early onset";
         }
-        else if((patientBean.getSex().contains("F")) && number == 7){
+        else if((sex.contains("F")) && number == 7){
             return "Early onset";
         }
         return "In Danger";

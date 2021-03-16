@@ -11,7 +11,7 @@ public class Recommandation {
 
     @Id
     private Integer id;
-    private int idPatient;
+    private Integer idPatient;
     private String observation;
 
     @Transient
@@ -28,11 +28,11 @@ public class Recommandation {
         this.id = id;
     }
 
-    public int getIdPatient() {
+    public Integer getIdPatient() {
         return idPatient;
     }
 
-    public void setIdPatient(int idPatient) {
+    public void setIdPatient(Integer idPatient) {
         this.idPatient = idPatient;
     }
 

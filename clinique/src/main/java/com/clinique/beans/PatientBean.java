@@ -3,6 +3,7 @@ package com.clinique.beans;
 import java.util.Date;
 
 public class PatientBean {
+
     private Integer id;
     private String firstName;
     private String lastName;

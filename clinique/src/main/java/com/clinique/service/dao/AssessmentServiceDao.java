@@ -13,7 +13,7 @@ public interface AssessmentServiceDao {
 
     Assessment findAssessmentByFirstName(String firstName)throws SQLException;
 
-    Assessment generateAssessment(int id) throws SQLException;
+    String generateAssessment(int id,long age,String sex) throws SQLException;
 
     void saveAssessment(Assessment input) throws SQLException;
 

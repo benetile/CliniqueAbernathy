@@ -57,8 +57,9 @@ public class RecommandationImpl implements RecommandationDao {
         connection = configDB.getConnection();
         PreparedStatement statement = connection.prepareStatement("INSERT INTO recommandation(id,idPatient,observation) VALUES (?,?,?);", Statement.RETURN_GENERATED_KEYS);
 
-        statement.setInt(1,recommandation.getIdPatient());
-        statement.setString(2,recommandation.getObservation());
+        statement.setInt(1,recommandation.getId());
+        statement.setInt(2,recommandation.getIdPatient());
+        statement.setString(3,recommandation.getObservation());
 
         statement.executeUpdate();
         ResultSet rs = statement.getGeneratedKeys();

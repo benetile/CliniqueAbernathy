@@ -15,7 +15,7 @@ public class Assessment {
     private Integer idPatient;
     private String firstName;
     private int age;
-    private String  assessment;
+    private String assessment;
 
     @Transient
     public static final String SEQUENCE = "sequenceAssessemnt";

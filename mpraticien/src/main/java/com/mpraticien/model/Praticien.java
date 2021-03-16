@@ -68,15 +68,4 @@ public class Praticien {
         this.phone = phone;
     }
 
-    @Override
-    public String toString() {
-        return "Praticien{" +
-                "id_praticien=" + idPraticien +
-                ", prenom='" + lastName + '\'' +
-                ", nom='" + firstName + '\'' +
-                ", categorie='" + speciality + '\'' +
-                ", sex='" + sex + '\'' +
-                ", telephone='" + phone + '\'' +
-                '}';
-    }
 }

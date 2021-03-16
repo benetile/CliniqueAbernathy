@@ -26,7 +26,7 @@ public class PraticienController {
     }
 
     @PostMapping("/praticiens/add")
-    public Praticien addNewPraticien(Praticien praticien) throws SQLException{
+    public Praticien addNewPraticien(@RequestBody Praticien praticien) throws SQLException{
         praticien.setIdPraticien(generateIdService.getSequenceNumberPraticien(Praticien.SEQUENCE_PRATICIEN));
         return praticienServiceDao.addPraticien(praticien);
     }

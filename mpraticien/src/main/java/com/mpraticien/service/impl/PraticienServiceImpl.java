@@ -143,7 +143,7 @@ public class PraticienServiceImpl implements PraticienServiceDao {
 
         //create new praticien to sql database
         connection = configDB.getConnection();
-        PreparedStatement statement = connection.prepareStatement("INSERT INTO praticien(idPratcien,lastName,firstName,speciality,sex,phone) VALUES(?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement = connection.prepareStatement("INSERT INTO praticien(idPraticien,firstName,lastName,speciality,sex,phone) VALUES(?,?,?,?,?,?);", Statement.RETURN_GENERATED_KEYS);
 
         statement.setInt(1,praticien.getIdPraticien());
         statement.setString(2,praticien.getFirstName());

@@ -36,8 +36,11 @@ public class RecommadationController {
     @PostMapping("/recommandations/add/{id}")
     public Recommandation addNewRecommandation(@RequestBody Recommandation inputRecommandation,@PathVariable("id") int id) throws SQLException{
         PatientBean bean = mPatientProxy.getPatientById(id);
+        if(bean==null){
+            return null;
+        }
         inputRecommandation.setId(generateIdService.getSequenceNumberRecommandtaion(Recommandation.SEQUENCE_RECOMMANDATION));
-        inputRecommandation.setIdPatient(bean.getId());
+        inputRecommandation.setIdPatient(id);
         return recommandationDao.addRecommandation(inputRecommandation);
     }
 
