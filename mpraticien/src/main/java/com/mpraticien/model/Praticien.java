@@ -1,13 +1,17 @@
 package com.mpraticien.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "praticien")
+@Document(value = "praticien")
 public class Praticien {
 
+    @Field("_id")
     @Id
-    private Integer idPraticien;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String speciality;
@@ -20,12 +24,12 @@ public class Praticien {
     public Praticien() {
     }
 
-    public Integer getIdPraticien() {
-        return idPraticien;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdPraticien(Integer idPraticien) {
-        this.idPraticien = idPraticien;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getFirstName() {

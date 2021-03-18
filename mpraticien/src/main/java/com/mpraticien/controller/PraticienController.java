@@ -1,10 +1,10 @@
 package com.mpraticien.controller;
 
 import com.mpraticien.model.Praticien;
-import com.mpraticien.service.dao.PraticienServiceDao;
+import com.mpraticien.service.dao.PraticienRepository;
 import com.mpraticien.service.impl.GenerateIdService;
+import com.mpraticien.service.impl.PraticienService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -15,50 +15,53 @@ import java.util.Optional;
 public class PraticienController {
 
     @Autowired
-    private PraticienServiceDao praticienServiceDao;
+    private PraticienRepository praticienRepository;
+
+    @Autowired
+    private PraticienService praticienService;
 
     @Autowired
     private GenerateIdService generateIdService;
 
     @GetMapping("/praticiens")
     public List<Praticien> getAllPraticiens() throws SQLException {
-        return praticienServiceDao.findAllPraticien();
+        return praticienRepository.findAll();
     }
 
     @PostMapping("/praticiens/add")
     public Praticien addNewPraticien(@RequestBody Praticien praticien) throws SQLException{
-        praticien.setIdPraticien(generateIdService.getSequenceNumberPraticien(Praticien.SEQUENCE_PRATICIEN));
-        return praticienServiceDao.addPraticien(praticien);
+        praticien.setId(generateIdService.getSequenceNumberPraticien(Praticien.SEQUENCE_PRATICIEN));
+        return praticienRepository.save(praticien);
     }
 
     @GetMapping("/praticiens/{speciality}")
     public List<Praticien> getPraticensBySpeciality(@PathVariable ("speciality") String speciality) throws SQLException{
-        return praticienServiceDao.findPraticiensBySpecilality(speciality);
+        return praticienRepository.findBySpeciality(speciality);
     }
     @GetMapping("/praticiens/{id}")
     public Optional getPraticenById(@PathVariable("id") int id)throws SQLException{
-       return praticienServiceDao.findById(id);
+       return praticienRepository.findById(id);
     }
     @GetMapping("/praticiens/{firstName}")
     public List<Praticien> getPraticensByFirstName(@PathVariable ("firstName") String firstName) throws SQLException {
-       return praticienServiceDao.findByFirstName(firstName);
+       return praticienRepository.findByFirstname(firstName);
     }
     @GetMapping("/praticiens/{lastName}")
     public List<Praticien> getPraticiensByLastName(@PathVariable ("lastName") String lastName) throws SQLException{
-       return praticienServiceDao.findByLastName(lastName);
+       return praticienRepository.findByLastname(lastName);
     }
     @GetMapping("/praticiens/{firstName}/{lastName}")
     public Praticien getPratcien(@PathVariable ("firstName") String firstName, @PathVariable("lastName") String lastName) throws SQLException{
-       return praticienServiceDao.findPraticien(firstName, lastName);
+       return praticienRepository.findByFirstnameAndLastname(firstName, lastName);
     }
     @PutMapping("/praticiens/update/{id}")
     public void updatePraticien(@PathVariable ("id") int id,@RequestBody Praticien praticien) throws SQLException{
-       praticien.setIdPraticien(id);
-       praticienServiceDao.updateInfoPraticien(id, praticien);
+       praticien.setId(id);
+     //  praticienService.updatePraticien(id, praticien);
     }
     @DeleteMapping("/praticiens/delete/{id}")
     public void deletePraticien(@PathVariable ("id") int id)throws SQLException{
-       praticienServiceDao.deletePraticien(id);
+       praticienRepository.deleteById(id);
     }
 
 }

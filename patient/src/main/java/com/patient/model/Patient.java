@@ -1,20 +1,12 @@
 package com.patient.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
 @Table(name ="patient")
-@Document(collection = "patient")
 public class Patient {
 
-    //@Field("_id")
-    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -25,8 +17,6 @@ public class Patient {
     private String homeAddress;
     private String phone;
 
-    @Transient
-    public static final String SEQUENCE_PATIENT = "sequencePatient";
 
     public Patient() {
     }

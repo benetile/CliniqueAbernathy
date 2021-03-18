@@ -3,8 +3,8 @@ package com.clinique.controller;
 import com.clinique.beans.PatientBean;
 import com.clinique.model.Assessment;
 import com.clinique.proxy.MPatientProxy;
-import com.clinique.service.dao.AssessmentServiceDao;
-import com.clinique.service.impl.GenerateIdService;
+import com.clinique.service.dao.AssessmentRepository;
+import com.clinique.service.impl.GenerateAssessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,43 +16,44 @@ import java.util.List;
 public class AssessmentController {
 
     @Autowired
-    private AssessmentServiceDao assessmentServiceDao;
+    private AssessmentRepository assessmentRepository;
+
+    @Autowired
+    private GenerateAssessService assessService;
 
     @Autowired
     MPatientProxy mPatientProxy;
 
-    @Autowired
-    private GenerateIdService generateIdService;
-
     @GetMapping("/assess/delete/{id}")
     public void deleteAnAssessment(@PathVariable("id") int id) throws SQLException{
-       assessmentServiceDao.deleteAssessment(id);
+       assessmentRepository.deleteById(id);
     }
 
     @GetMapping("/assess/id/{id}")
-    public Assessment generateAssessment(@PathVariable ("id") int id) throws SQLException {
+    public Assessment generateAssessment(@PathVariable ("id") int id){
         PatientBean patientBean = mPatientProxy.getPatientById(id);
+        System.out.println(patientBean.getFirstName());
         if (patientBean==null){
             return null;
         }
         Assessment assess = new Assessment();
-        assess.setId(generateIdService.getSequenceNumberAssessment(Assessment.SEQUENCE));
-        assess.setIdPatient(id);
+
+        assess.setIdPatient(patientBean.getId());
         assess.setFirstName(patientBean.getFirstName());
         assess.setAge(new Date().getYear() - patientBean.getBirthday().getYear());
-        assess.setAssessment(assessmentServiceDao.generateAssessment(id,assess.getAge(),patientBean.getSex()));
+        assess.setAssessment(assessService.generateAssessment(id,assess.getAge(), patientBean.getSex()));
 
         return assess;
     }
 
     @GetMapping("/assess")
     public List<Assessment> getAllAssessments() throws SQLException {
-         List<Assessment> assessments = assessmentServiceDao.findAssessments();
+         List<Assessment> assessments = assessmentRepository.findAll();
          return assessments;
     }
 
     @GetMapping("/assess/firstName/{firstName}")
     public Assessment getAssementByname(@PathVariable("firstName") String firstName)throws SQLException{
-       return assessmentServiceDao.findAssessmentByFirstName(firstName);
+       return null;
     }
 }

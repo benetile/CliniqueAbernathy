@@ -1,8 +1,7 @@
 package com.clinique.controller;
 
 import com.clinique.model.Appointment;
-import com.clinique.service.dao.AppointmentServiceDao;
-import com.clinique.service.impl.GenerateIdService;
+import com.clinique.service.dao.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,35 +13,33 @@ import java.util.Optional;
 public class AppointmentController {
 
     @Autowired
-    private GenerateIdService generateIdService;
-
-    @Autowired
-    private AppointmentServiceDao appointmentServiceDao;
+    private AppointmentRepository appointmentRepository;
 
     @PostMapping("/appointment/add")
     public Appointment createAppointment(@RequestBody Appointment input) throws SQLException {
-        input.setId(generateIdService.getSequenceNumberAppointment(Appointment.SEQUENCE));
-        return appointmentServiceDao.makeAnAppointment(input);
+        return appointmentRepository.save(input);
     }
 
     @GetMapping("/appointment/appointments/")
     public List<Appointment> getAllAppointments() {
-        return appointmentServiceDao.findAll();
+        return appointmentRepository.findAll();
     }
 
     @GetMapping("/appointment/appointments/id/{id}")
     public Optional getAppointmentById(@PathVariable ("id") int id) throws SQLException {
-        return appointmentServiceDao.findAppointmentById(id);
+        return appointmentRepository.findById(id);
     }
 
     @PutMapping("/appointment/appointments/update/{id}")
     public void updateAppointment(@PathVariable("id") int id,@RequestBody Appointment update) throws SQLException {
-        update.setId(id);
-        appointmentServiceDao.updateAnAppointment(id, update);
+        Optional<Appointment> appointment = appointmentRepository.findById(id);
+        if(appointment.isPresent()){
+            appointmentRepository.save(update);
+        }
     }
 
     @DeleteMapping("/appointment/appointments/delete/{id}")
     public void deleteAppointment(@PathVariable("id") int id) throws SQLException {
-        appointmentServiceDao.deleteAnAppointment(id);
+        appointmentRepository.deleteById(id);
     }
 }

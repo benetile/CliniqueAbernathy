@@ -32,7 +32,7 @@ public class Recommandation {
         return idPatient;
     }
 
-    public void setIdPatient(Integer idPatient) {
+    public void setIdPatient(Integer  idPatient) {
         this.idPatient = idPatient;
     }
 

@@ -1,24 +1,18 @@
 package com.clinique.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
-@Document(value = "assessment")
+@Table(name = "assessment")
 public class Assessment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private Integer idPatient;
     private String firstName;
     private int age;
     private String assessment;
-
-    @Transient
-    public static final String SEQUENCE = "sequenceAssessemnt";
 
     public Assessment() {
     }

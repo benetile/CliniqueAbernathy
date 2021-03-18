@@ -12,9 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @EnableDiscoveryClient
 @EnableFeignClients("com.user")
-@EnableMongoRepositories(basePackageClasses = UserRepository.class)
-@EnableJpaRepositories(excludeFilters =
-@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = UserRepository.class))
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 @SpringBootApplication
 public class UserApplication {
 

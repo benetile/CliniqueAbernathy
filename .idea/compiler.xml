@@ -7,16 +7,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="zuul-server" />
-        <module name="eureka-server" />
-        <module name="user" />
         <module name="patient" />
         <module name="mpraticien" />
         <module name="clinique" />
+        <module name="eureka-server" />
+        <module name="user" />
+        <module name="frontend" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="clinique" target="1.8" />
       <module name="eureka-server" target="1.8" />
+      <module name="frontend" target="1.8" />
       <module name="mconsultations" target="1.8" />
       <module name="mpraticien" target="1.8" />
       <module name="patient" target="1.8" />
@@ -28,6 +30,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="clinique" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
+      <module name="frontend" options="-parameters" />
       <module name="mconsultations" options="-parameters" />
       <module name="mpraticien" options="-parameters" />
       <module name="patient" options="-parameters" />
