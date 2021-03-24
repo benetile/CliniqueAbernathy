@@ -23,43 +23,43 @@ public class PraticienController {
     @Autowired
     private GenerateIdService generateIdService;
 
-    @GetMapping("/praticiens")
+    @GetMapping("prat/praticiens")
     public List<Praticien> getAllPraticiens() throws SQLException {
         return praticienRepository.findAll();
     }
 
-    @PostMapping("/praticiens/add")
+    @PostMapping("/prat/add")
     public Praticien addNewPraticien(@RequestBody Praticien praticien) throws SQLException{
         praticien.setId(generateIdService.getSequenceNumberPraticien(Praticien.SEQUENCE_PRATICIEN));
         return praticienRepository.save(praticien);
     }
 
-    @GetMapping("/praticiens/{speciality}")
+    @GetMapping("/prat/{speciality}")
     public List<Praticien> getPraticensBySpeciality(@PathVariable ("speciality") String speciality) throws SQLException{
         return praticienRepository.findBySpeciality(speciality);
     }
-    @GetMapping("/praticiens/{id}")
+    @GetMapping("/prat/id/{id}")
     public Optional getPraticenById(@PathVariable("id") int id)throws SQLException{
        return praticienRepository.findById(id);
     }
-    @GetMapping("/praticiens/{firstName}")
+    @GetMapping("/prat/firstname/{firstName}")
     public List<Praticien> getPraticensByFirstName(@PathVariable ("firstName") String firstName) throws SQLException {
        return praticienRepository.findByFirstname(firstName);
     }
-    @GetMapping("/praticiens/{lastName}")
+    @GetMapping("/prat/lastname/{lastName}")
     public List<Praticien> getPraticiensByLastName(@PathVariable ("lastName") String lastName) throws SQLException{
        return praticienRepository.findByLastname(lastName);
     }
-    @GetMapping("/praticiens/{firstName}/{lastName}")
+    @GetMapping("/prat/{firstName}/{lastName}")
     public Praticien getPratcien(@PathVariable ("firstName") String firstName, @PathVariable("lastName") String lastName) throws SQLException{
        return praticienRepository.findByFirstnameAndLastname(firstName, lastName);
     }
-    @PutMapping("/praticiens/update/{id}")
+    @PutMapping("/prat/update/{id}")
     public void updatePraticien(@PathVariable ("id") int id,@RequestBody Praticien praticien) throws SQLException{
        praticien.setId(id);
      //  praticienService.updatePraticien(id, praticien);
     }
-    @DeleteMapping("/praticiens/delete/{id}")
+    @GetMapping("/prat/delete/{id}")
     public void deletePraticien(@PathVariable ("id") int id)throws SQLException{
        praticienRepository.deleteById(id);
     }

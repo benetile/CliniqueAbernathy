@@ -1,5 +1,7 @@
 package com.patient.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,15 +10,16 @@ import java.util.Date;
 public class Patient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String sex;
-    private String homeAddress;
+    private String address;
     private String phone;
-
 
     public Patient() {
     }
@@ -29,20 +32,20 @@ public class Patient {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Date getBirthday() {
@@ -61,12 +64,12 @@ public class Patient {
         this.sex = sex;
     }
 
-    public String getHomeAddress() {
-        return homeAddress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setHomeAddress(String homeAddress) {
-        this.homeAddress = homeAddress;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getPhone() {

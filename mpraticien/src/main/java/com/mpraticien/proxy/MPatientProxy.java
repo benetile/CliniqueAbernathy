@@ -9,21 +9,21 @@ import java.util.List;
 @FeignClient(name = "patient",url = "localhost:8081")
 public interface MPatientProxy {
 
-    @PostMapping(value ="/add")
+    @PostMapping(value ="/pat/add")
     PatientBean addNewPatient(PatientBean patientBean);
 
-    @GetMapping(value = "/patients")
+    @GetMapping(value = "/pat/patients")
     List<PatientBean> showAllPatients();
 
-    @GetMapping(value ="/patients/{id}")
+    @GetMapping(value ="/pat/id/{id}")
     PatientBean getPatientById(@PathVariable("id") int id);
 
-    @GetMapping(value ="/patients/{firstName}/{lastName}")
+    @GetMapping(value ="/pat/patients/{firstname}/{lastname}")
     PatientBean getPatientByLastANDFirstName(@PathVariable("firstName")String firstName, @PathVariable("lastName") String lastName);
 
-    @PutMapping("/patients/update/{id}")
+    @PutMapping("/pat/update/{id}")
     PatientBean updateInfoPatient(@PathVariable("id") int id, @RequestBody PatientBean patientBean);
 
-    @DeleteMapping("/patients/delete/{id}")
+    @DeleteMapping("/pat/delete/{id}")
     void deletePatient(@PathVariable("id") int id);
 }

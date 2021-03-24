@@ -13,7 +13,7 @@ public class Appointment {
     private String firstName;
     private String lastName;
     private String pattern;
-    private Date dateAppointment;
+    private Date date;
 
     public Appointment() {
     }
@@ -42,12 +42,12 @@ public class Appointment {
         this.lastName = lastName;
     }
 
-    public Date getDateAppointment() {
-        return dateAppointment;
+    public Date getDate() {
+        return date;
     }
 
-    public void setDateAppointment(Date dateAppointment) {
-        this.dateAppointment = dateAppointment;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getPattern() {
@@ -65,7 +65,7 @@ public class Appointment {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", pattern='" + pattern + '\'' +
-                ", dataAppointment=" + dateAppointment +
+                ", dataAppointment=" + date +
                 '}';
     }
 }

@@ -39,23 +39,26 @@ public class RecommadationController {
     }
 
     @PostMapping("/recommandations/add/{id}")
-    public Recommandation addNewRecommandation(@RequestBody Recommandation input,@PathVariable("id") int id) throws SQLException{
+    public Recommandation addNewRecommandation(@RequestBody String observation,@PathVariable("id") int id) throws SQLException{
+        Recommandation input = new Recommandation();
         PatientBean bean = mPatientProxy.getPatientById(id);
         if(bean==null){
             return null;
         }
+        input.setObservation(observation);
         input.setId(generateIdService.getSequenceNumberRecommandtaion(Recommandation.SEQUENCE_RECOMMANDATION));
         input.setIdPatient(id);
         return recommandationRepository.save(input);
     }
 
     @PutMapping("/recommandations/update/{id}")
-    public void updateAObservation(@PathVariable ("id") int id, @RequestBody Recommandation updateObs)throws SQLException{
-       updateObs.setId(id);
-      // recommandationService.updateRecommandation(id,updateObs.getObservation());
-       //(id, updateObs);
+    public Recommandation updateAObservation(@PathVariable ("id") int id, @RequestBody Recommandation updateObs)throws SQLException{
+        Recommandation rec = recommandationRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Invalid id "+id));
+        recommandationService.updateRecommandation(id, updateObs.getObservation());
+        return updateObs;
     }
-    @DeleteMapping("/recommandations/delete/{id}")
+
+    @GetMapping("/recommandations/delete/{id}")
     public void deleteRecommandation(@PathVariable("id") int id) throws SQLException{
         recommandationRepository.deleteById(id);
     }

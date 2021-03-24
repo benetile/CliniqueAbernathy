@@ -3,8 +3,12 @@ package com.patient.controller;
 import com.patient.model.Patient;
 import com.patient.service.dao.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -13,31 +17,52 @@ import java.util.Optional;
 public class PatientController {
 
     @Autowired
-    private  PatientRepository patientRepository;
+    PatientRepository patientRepository;
 
-    @PostMapping("/add")
-    public Patient addNewPatient(@RequestBody Patient patient) throws SQLException {
-        return patientRepository.save(patient);
+    Patient pat = new Patient();
+
+    @PostMapping("/pat/add")
+    public Patient validatePatient(@RequestBody Patient patient, BindingResult result) throws SQLException {
+        pat = patientRepository.findByFirstnameAndLastname(patient.getFirstname(),patient.getLastname());
+        if (!result.hasErrors()){
+            if (pat==null){
+                return patientRepository.save(patient);
+            }
+        }
+        return null;
     }
 
-    @GetMapping("/patients")
-    public List<Patient> showAllPatients() throws SQLException{
-       return patientRepository.findAll();
+    @GetMapping("/pat/patients/{firstname}/{lastname}")
+    public Patient getPatientByFirstAndLastname(@PathVariable("firstname") String firstname,
+                                                @PathVariable("lastname") String lastname){
+        return patientRepository.findByFirstnameAndLastname(firstname,lastname);
     }
 
-    @GetMapping("/patients/{id}")
-    public Optional<Patient> getPatientById(@PathVariable Integer id) throws SQLException{
-        return patientRepository.findById(id);
+    @GetMapping("/pat/patients")
+    public List<Patient> showAllPatients(){
+        return patientRepository.findAll();
     }
 
-    @PutMapping("/patients/update/{id}")
-    public Patient updateInfoPatient(@PathVariable("id") int id, @RequestBody Patient patient) throws SQLException {
-        patient.setId(id);
-        return patientRepository.save(patient);
+    @GetMapping("/pat/id/{id}")
+    public Patient getPatientById(@PathVariable ("id") Integer id){
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Invalid patient "+id));
+        return patient;
     }
 
-    @DeleteMapping("/patients/delete/{id}")
-    public void deletePatient(@PathVariable("id") Integer id) throws SQLException {
+    @PutMapping("/pat/update/{id}")
+    public Patient updateInfoPatient(@PathVariable("id") Integer id, @RequestBody Patient patient){
+        Optional<Patient> update = patientRepository.findById(id);
+        if (update.isPresent()){
+            return patientRepository.save(patient);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/pat/delete/{id}")
+    public void deletePatient(@PathVariable("id") Integer id,Model model) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("Invalid patient " +id));
         patientRepository.deleteById(id);
     }
 }

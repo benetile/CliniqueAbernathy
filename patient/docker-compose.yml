@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  patient:
+    image: patient
+    ports:
+      - "8081:8081"
+    depends_on:
+      -
+
+  patient-:
+    image: tourguide:rewardCentral
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+
+networks:
+  tourGuide-network:

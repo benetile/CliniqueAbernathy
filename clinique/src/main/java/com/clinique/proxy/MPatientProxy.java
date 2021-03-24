@@ -8,21 +8,21 @@ import java.util.List;
 
 @FeignClient(name = "patient",url = "localhost:8081")
 public interface MPatientProxy {
-    @PostMapping(value ="/add")
-    PatientBean addNewPatient(PatientBean patientBean);
+    @PostMapping("/pat/add")
+    PatientBean validatePatient(@RequestBody PatientBean patient);
 
-    @GetMapping(value = "/patients")
+    @GetMapping("/pat/patients")
     List<PatientBean> showAllPatients();
 
-    @GetMapping(value ="/patients/{id}")
-    PatientBean getPatientById(@PathVariable("id") int id);
+    @GetMapping("/pat/patients/{firstname}/{lastname}")
+    PatientBean getPatientByFirstAndLastname(@PathVariable("firstname") String firstname,
+                                             @PathVariable("lastname") String lastname);
+    @GetMapping("/pat/id/{id}")
+    PatientBean getPatientById(@PathVariable("id") Integer id);
 
-    @GetMapping(value ="/patients/{firstName}/{lastName}")
-    PatientBean getPatientByLastANDFirstName(@PathVariable("firstName")String firstName, @PathVariable("lastName") String lastName);
+    @PutMapping("/pat/update/{id}")
+    PatientBean updateInfoPatient(@PathVariable("id") Integer id, @RequestBody PatientBean patient);
 
-    @PutMapping("/patients/update/{id}")
-    PatientBean updateInfoPatient(@PathVariable("id") int id, @RequestBody PatientBean patientBean);
-
-    @DeleteMapping("/patients/delete/{id}")
-    void deletePatient(@PathVariable("id") int id);
+    @GetMapping("/pat/delete/{id}")
+    void deletePatient(@PathVariable("id") Integer id);
 }

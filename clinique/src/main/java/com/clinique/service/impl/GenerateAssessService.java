@@ -85,6 +85,9 @@ public class GenerateAssessService {
         else if((sex.contains("F")) && number== 4){
             return "In Danger";
         }
+        else if(number<2){
+            return "None";
+        }
         return "Bordeline";
     }
 
@@ -111,6 +114,9 @@ public class GenerateAssessService {
         }
         else if((sex.contains("F")) && number >= 7){
             return "Early onset";
+        }
+        else if(number<2){
+            return "None";
         }
 
         return "Bordeline";

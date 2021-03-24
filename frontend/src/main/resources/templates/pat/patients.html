@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Clinique Abernathy</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="">Appointment</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-6"></div>
+    </div>
+    <div class="row"><h2>Patient List</h2></div>
+    <div class="row">
+    <a href="/pat/add" class="btn btn-primary btn-sm">Add New Patient</a>
+        <br>
+    <table class="table table-bordered table-dark">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Address</th>
+            <th scope="col">Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="patientBean :${patients}">
+            <th th:text="${patientBean.id}"></th>
+            <th th:text="${patientBean.firstname}"></th>
+            <th th:text="${patientBean.lastname}"></th>
+            <th th:text="${patientBean.sex}"></th>
+            <th th:text="${patientBean.birthday}"></th>
+            <th th:text="${patientBean.address}"></th>
+            <th th:text="${patientBean.phone}"></th>
+            <th style="width : 15%" class="text-center">
+                <a th:href="@{/pat/update/{id}(id=${patientBean.id})}">Edit</a>&nbsp;|&nbsp;
+                <a th:href="@{/pat/delete/{id}(id=${patientBean.id})}">Delete</a>&nbsp;|&nbsp;
+                <a th:href="@{/rec/pat/{id}(id=${patientBean.id})}">View</a>
+            </th>
+        </tr>
+    </tbody>
+    </table>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Clinique Abernathy</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="">Appointment</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+
+        </div>
+    </div>
+    <div class="row"><h2>Information Patient</h2></div>
+    <div class="row">
+        <table class="table table-bordered" bgcolor="black">
+            <thead th:object="${patientBean}">
+                <tr><th>Id Patient</th><th th:text="${patientBean.id}"></th></tr>
+                <tr><th>First Name</th><th  th:text="${patientBean.firstname}"></th></tr>
+                <tr><th>Last Name</th><th  th:text="${patientBean.lastname}"></th></tr>
+                <tr><th>Sex</th><th  th:text="${patientBean.sex}"></th></tr>
+                <tr><th>Years</th><th th:text="${age}"></th></tr>
+                <tr bgcolor="silver"><th>Assessment</th><th th:text="${assess}"></th></tr>
+            </thead>
+        </table>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="row"><h2>Consultation Patient</h2></div>
+    <br>
+    <div class="row">
+        <a th:href="@{/rec/add/{id}(id=${patientBean.id})}" class="btn btn-primary btn-sm">Add New Observation</a>
+        <br>
+    <table class="table table-bordered table-dark">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Id Patient</th>
+            <th scope="col">Observation/Recommandation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="recommandation :${recommandations}">
+            <th th:text="${recommandation.id}"></th>
+            <th th:text="${recommandation.idPatient}"></th>
+            <th th:text="${recommandation.observation}"></th>
+            <th style="width : 15%" class="text-center">
+                <a th:href="@{/rec/update/{id}(id=${recommandation.id})}">Edit</a>&nbsp;|&nbsp;
+                <a th:href="@{/rec/delete/{id}(id=${recommandation.id})}">Delete</a>&nbsp;|&nbsp;
+            </th>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <a class="btn btn-primary active" href="/pat/patients">Cancel</a>
+</div>
+</body>
+</html>
