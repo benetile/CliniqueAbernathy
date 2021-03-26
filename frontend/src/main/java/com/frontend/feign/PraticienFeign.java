@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@FeignClient(name = "mpraticien",url = "localhost:8082")
+//@FeignClient(name = "mpraticien",url = "localhost:8082")
 public interface PraticienFeign {
 
     @GetMapping("prat/praticiens")

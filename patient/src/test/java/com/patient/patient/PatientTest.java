@@ -1,45 +1,45 @@
 package com.patient.patient;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.patient.controller.PatientController;
 import com.patient.model.Patient;
 import com.patient.service.dao.PatientRepository;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest
-@AutoConfigureMockMvc
 public class PatientTest {
 
     @Autowired
     private PatientRepository patientRepository;
 
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private PatientController patientController;
 
-    private MockMvc mockMvc;
+   @Test
+   public void addPatient() throws SQLException {
+       Patient patient =new Patient("firstname11","lastname11",new java.sql.Date(new Date().getTime()),"M","address1","0000");
 
-    ObjectMapper mapper = new ObjectMapper();
+       patientRepository.save(patient);
 
-    @Before()
-    public void setUp(){
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+       Patient test = patientRepository.findByFirstname(patient.getFirstname());
+       assertNotNull(patient);
+       assertEquals(patient.getLastname(),test.getLastname());
+   }
 
-    //Patient patient1 = new Patient(1,"firstName1","lastName1",new Date(System.currentTimeMillis()),"M","homeAddress","00000000");
+   @Test
+    public void getAllPatient(){
 
-    @Test
-    public void addUser(){
+       List<Patient> patients =patientRepository.findAll();
 
-    }
+       assertNotNull(patients.size());
+   }
+
 }

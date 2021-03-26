@@ -24,6 +24,14 @@ public class Praticien {
     public Praticien() {
     }
 
+    public Praticien(String firstName, String lastName, String speciality, String sex, String phone) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.speciality = speciality;
+        this.sex = sex;
+        this.phone = phone;
+    }
+
     public Integer getId() {
         return id;
     }

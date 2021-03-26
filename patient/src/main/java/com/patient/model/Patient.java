@@ -24,6 +24,15 @@ public class Patient {
     public Patient() {
     }
 
+    public Patient( String firstname, String lastname, Date birthday, String sex, String address, String phone) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.birthday = birthday;
+        this.sex = sex;
+        this.address = address;
+        this.phone = phone;
+    }
+
     public Integer getId() {
         return id;
     }

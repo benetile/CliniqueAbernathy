@@ -59,7 +59,7 @@ public class PatientController {
         return null;
     }
 
-    @DeleteMapping("/pat/delete/{id}")
+    @GetMapping("/pat/delete/{id}")
     public void deletePatient(@PathVariable("id") Integer id,Model model) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("Invalid patient " +id));

@@ -20,6 +20,11 @@ public class Recommandation {
     public Recommandation() {
     }
 
+    public Recommandation(Integer idPatient, String observation) {
+        this.idPatient = idPatient;
+        this.observation = observation;
+    }
+
     public Integer getId() {
         return id;
     }

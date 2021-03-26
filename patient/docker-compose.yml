@@ -4,16 +4,17 @@ services:
     image: patient
     ports:
       - "8081:8081"
-    depends_on:
-      -
 
-  patient-:
-    image: tourguide:rewardCentral
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - "8082:8082"
+  database:
+    image: "postgres"
+    hostname: postgres
+    env_file:
+      - database.env
+    volumes:
+      -database-data: /var/lib/postgresql/data/
+
+volumes:
+  database-data:
 
 networks:
-  tourGuide-network:
+  patient-network:

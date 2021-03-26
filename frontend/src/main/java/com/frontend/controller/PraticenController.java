@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @Controller
 public class PraticenController {
 
-    @Autowired
+  /*  @Autowired
     private PraticienFeign praticienFeign;
 
     @GetMapping("/prat/add")
@@ -26,5 +26,5 @@ public class PraticenController {
         if(praticienFeign.addNewPraticien(praticienBean)!=null){
         }
         return null;
-    }
+    }*/
 }

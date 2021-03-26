@@ -24,10 +24,10 @@ public class AssessmentController {
     @Autowired
     MPatientProxy mPatientProxy;
 
-    @GetMapping("/assess/delete/{id}")
+   /* @GetMapping("/assess/delete/{id}")
     public void deleteAnAssessment(@PathVariable("id") int id) throws SQLException{
        assessmentRepository.deleteById(id);
-    }
+    }*/
 
     @GetMapping("/assess/id/{id}")
     public Assessment generateAssessment(@PathVariable ("id") int id){
@@ -52,8 +52,8 @@ public class AssessmentController {
          return assessments;
     }
 
-    @GetMapping("/assess/firstName/{firstName}")
+   /* @GetMapping("/assess/firstName/{firstName}")
     public Assessment getAssementByname(@PathVariable("firstName") String firstName)throws SQLException{
        return null;
-    }
+    }*/
 }

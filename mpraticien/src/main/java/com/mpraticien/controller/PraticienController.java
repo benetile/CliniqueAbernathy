@@ -56,6 +56,7 @@ public class PraticienController {
     }
     @PutMapping("/prat/update/{id}")
     public void updatePraticien(@PathVariable ("id") int id,@RequestBody Praticien praticien) throws SQLException{
+
        praticien.setId(id);
      //  praticienService.updatePraticien(id, praticien);
     }
