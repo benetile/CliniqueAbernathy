@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.service-clinique</groupId>
 	<artifactId>zuul-server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>zuul-server</name>
 	<description>zuul for clinique</description>
 	<properties>

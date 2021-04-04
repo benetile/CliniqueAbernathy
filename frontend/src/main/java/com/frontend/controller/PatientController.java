@@ -27,7 +27,9 @@ public class PatientController {
 
     @PostMapping("/pat/validate")
     public String validatePatient(@Valid PatientBean patientBean,Model model){
-        if(patientFeign.validatePatient(patientBean)!=null){
+        PatientBean bean = patientFeign.getPatientByFirstAndLastname(patientBean.getFirstname(), patientBean.getLastname());
+        if(bean==null){
+            patientFeign.validatePatient(patientBean);
             model.addAttribute("patient",patientFeign.showAllPatients());
             return "redirect:/pat/patients";
         }

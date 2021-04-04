@@ -1,20 +1,25 @@
-version: "3.8"
+version: "3.7"
 services:
+  postgresdb:
+    image: "postgres"
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=clinique
+    ports:
+      - "5432:5432"
+
   patient:
-    image: patient
+    container_name: patient-container
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    links:
+      - postgresdb
+    depends_on:
+      - postgresdb
+    environment:
+     # - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:9102/eureka
+      - spring.datasource.url=jdbc:postgresql://postgresdb:5432/clinique
     ports:
       - "8081:8081"
-
-  database:
-    image: "postgres"
-    hostname: postgres
-    env_file:
-      - database.env
-    volumes:
-      -database-data: /var/lib/postgresql/data/
-
-volumes:
-  database-data:
-
-networks:
-  patient-network:

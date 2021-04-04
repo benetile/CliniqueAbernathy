@@ -44,7 +44,7 @@ class PatientApplicationTests {
 	}
 
 	ObjectMapper mapper = new ObjectMapper();
-	Patient patient =new Patient("firstname10","lastname10",new Date(System.currentTimeMillis()),"M","address1","0000");
+	Patient patient =new Patient("first","last",new Date(System.currentTimeMillis()),"F","address1","0000");
 
 	@Test
 	public void getAllPatient() throws Exception{
@@ -72,8 +72,8 @@ class PatientApplicationTests {
 	@Test
 	public void updateAndDeletePatientTest() throws Exception{
 		String input = mapper.writeValueAsString(patient);
-		MvcResult result = this.mvc.perform(get("/pat/update/38").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-		MvcResult update2 = this.mvc.perform(MockMvcRequestBuilders.put("/pat/update/38")
+		MvcResult result = this.mvc.perform(get("/pat/update/66").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+		MvcResult update2 = this.mvc.perform(MockMvcRequestBuilders.put("/pat/update/66")
 				.contentType(MediaType.APPLICATION_JSON).content(input)
 				.param("firstname","firstname4")
 				.param("lastname","lastname4")
@@ -86,13 +86,7 @@ class PatientApplicationTests {
 				.andReturn();
 
 		//delete patient
-		MvcResult delete = this.mvc.perform(get("/pat/delete/38").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+		MvcResult delete = this.mvc.perform(get("/pat/delete/66").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 		assertFalse(patientRepository.findById(28).isPresent());
 	}
-	@Test
-	void contextLoads() {
-	}
-
-
-
 }
