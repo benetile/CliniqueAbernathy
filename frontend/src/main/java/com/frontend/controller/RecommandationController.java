@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,21 @@ public class RecommandationController {
         return "recommandation/listRec";
     }
 
+    @GetMapping("rec/pat/assess")
+    public String getAssessments(Model model){
+        List<PatientBean> patientBeans = patientFeign.showAllPatients();
+        List<AssessBean> assessments = new ArrayList<>();
+        patientBeans.parallelStream().forEach(patientBean ->{
+            AssessBean assessBean = assessFeign.generateAssessment(patientBean.getId());
+            assessBean.setIdPatient(patientBean.getId());
+            assessBean.setFirstName(patientBean.getFirstname());
+            assessBean.setAge(new Date().getYear() - patientBean.getBirthday().getYear());
+            assessments.add(assessBean);
+        });
+        model.addAttribute("assessments",assessments);
+        return "recommandation/recommandations";
+    }
+
     @GetMapping("rec/add/{id}")
     public String addObservation(@PathVariable("id") Integer id, Model model){
         RecommandationBean recommandation = new RecommandationBean();
@@ -55,11 +71,9 @@ public class RecommandationController {
     public String validateObservation(@PathVariable("id") Integer id,@Valid RecommandationBean recommandation,Model model){
         System.out.println(recommandation.getObservation());
         if(recommandation.getObservation()!=null){
-       // if(recommandationFeign.addNewRecommandation(recommandation,id)!=null){
             recommandationFeign.addNewRecommandation(recommandation.getObservation(),id);
             model.addAttribute("recommandations",recommandationFeign.getAllRecommandationPatient(id));
-            return"redirect:/pat/patients";
-
+            return "redirect:/rec/pat/{id}";
         }
         return "recommandation/addRec";
     }
@@ -76,7 +90,7 @@ public class RecommandationController {
                                                                 Model model){
         if(recommandationFeign.updateAObservation(id,recommandationBean)!=null){
             model.addAttribute("recommandations",recommandationFeign.getAllRecommandationPatient(id));
-            return"redirect:/pat/patients";
+            return "redirect:/rec/pat/{id}";
         }
         return "recommandation/update";
     }

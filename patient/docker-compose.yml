@@ -1,7 +1,20 @@
-version: "3.7"
+version: "3"
 services:
+  eureka-server:
+    container_name: eureka
+    networks:
+      - clinique-network
+    build:
+      context: .
+      dockerfile: ../eureka-server/Dockerfile
+    image: eureka-server:latest
+    ports:
+      - "9102:9102"
+
   postgresdb:
-    image: "postgres"
+    image: postgres:latest
+    networks:
+      - clinique-network
     environment:
       - POSTGRES_PASSWORD=root
       - POSTGRES_USER=postgres
@@ -10,16 +23,23 @@ services:
       - "5432:5432"
 
   patient:
-    container_name: patient-container
+    image: clinique-patient
+    container_name: clinique-patient
+    networks:
+      - clinique-network
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
     links:
       - postgresdb
+      - eureka-server
     depends_on:
       - postgresdb
+      - eureka-server
     environment:
-     # - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:9102/eureka
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:9102/eureka
       - spring.datasource.url=jdbc:postgresql://postgresdb:5432/clinique
     ports:
       - "8081:8081"
+networks:
+  clinique-network:

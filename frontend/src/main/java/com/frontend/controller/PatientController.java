@@ -22,6 +22,8 @@ public class PatientController {
 
     @GetMapping("/pat/add")
     public String homePage(Model model){
+        PatientBean patientBean = new PatientBean();
+        model.addAttribute("patientBean",patientBean);
         return "pat/addPat";
     }
 

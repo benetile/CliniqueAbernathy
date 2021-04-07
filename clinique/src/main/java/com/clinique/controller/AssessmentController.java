@@ -43,7 +43,7 @@ public class AssessmentController {
 
     @GetMapping("/assess")
     public List<Assessment> getAllAssessments() throws SQLException {
-         List<Assessment> assessments = assessmentRepository.findAll();
+         List<Assessment> assessments = assessService.getAssessments();
          return assessments;
     }
 

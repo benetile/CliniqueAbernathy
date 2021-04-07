@@ -8,8 +8,13 @@ import com.clinique.proxy.MRecommandationProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 public class GenerateAssessService {
@@ -22,6 +27,7 @@ public class GenerateAssessService {
 
     private static  final List<String> triggers = Arrays.asList("Hémoglobine A1C","hémoglobine A1C","Microalbumine","microalbumine","Poids","poids","fumeur","Fumeur","Anormal","anormal","Cholestérol","cholestérol","Vertige","vertige",
             "Rechute","rechute","réaction", "Réaction","Anticorps","anticorps","Taille","taille");
+
 
     public String generateAssessment(int id,long age,String sex) {
         Assessment assessment = new Assessment();
@@ -47,15 +53,22 @@ public class GenerateAssessService {
             assessment.setAssessment(determinatedAssessThan(number,sex));
             return assessment.getAssessment();
         }
-       /* else if((age<30) && (number>4 && number<=7)){
-            assessment.setAssessment(determinatedForEarlyOnset(number,id,sex));
-            return assessment.getAssessment();
-        }
-        else if (number<2){
-            assessment.setAssessment("None");
-            return assessment.getAssessment();
-        }*/
         return "None";
+    }
+    public List<Assessment> getAssessments(){
+        List<Assessment> assessments= new ArrayList<>();
+        Assessment assess = new Assessment();
+        List<PatientBean> patientBeans = mPatientProxy.showAllPatients();
+        //Method Multithread
+        patientBeans.parallelStream().forEach(patientBean ->{
+            Assessment assessment = new Assessment();
+            assessment.setIdPatient(patientBean.getId());
+            assessment.setFirstName(patientBean.getFirstName());
+            assessment.setAge(new Date().getYear() - patientBean.getBirthday().getYear());
+            assessment.setAssessment(generateAssessment(patientBean.getId(), assessment.getAge(), patientBean.getSex()));
+            assessments.add(assessment);
+        });
+        return assessments;
     }
 
     public int verifyTriggers(int id){

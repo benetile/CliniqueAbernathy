@@ -75,12 +75,12 @@ class MpraticienApplicationTests {
 				.andDo(MockMvcResultHandlers.print());
 
 		//find by id
-		mvc.perform(get("/recommandations/patients/id/46"))
+		mvc.perform(get("/recommandations/patients/id/47"))
 				.andExpect(status().isOk())
 				.andDo(MockMvcResultHandlers.print());
 
 		//update recommandation
-		MvcResult update = this.mvc.perform(MockMvcRequestBuilders.put("/recommandations/update/46")
+		MvcResult update = this.mvc.perform(MockMvcRequestBuilders.put("/recommandations/update/47")
 				.contentType(MediaType.APPLICATION_JSON).content(input)
 				.param("idPatient","1")
 				.param("observation","malade update"))
@@ -89,7 +89,7 @@ class MpraticienApplicationTests {
 				.andReturn();
 
 		//delete recommandation
-		MvcResult delete = this.mvc.perform(get("/recommandations/delete/46").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+		MvcResult delete = this.mvc.perform(get("/recommandations/delete/48").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 		//assertFalse(recommandationRepository.findById(32).isPresent());
 	}
 
@@ -143,9 +143,6 @@ class MpraticienApplicationTests {
 				.param("phone","1111111"))
 				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
-		//delete recommandation
-		//MvcResult delete = this.mvc.perform(get("/prat/delete/10").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-		//assertFalse(recommandationRepository.findById(5).isPresent());
 	}
 	@Test
 	void contextLoads() {
